@@ -43,7 +43,7 @@ class MidtransController extends Controller
         // Parameter transaksi
         $transactionDetails = [
             'order_id' => $orderId,
-            'gross_amount' => $order->total_price,
+            'gross_amount' => $order,
         ];
 
         $transaction = [
