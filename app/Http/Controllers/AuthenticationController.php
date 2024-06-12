@@ -43,6 +43,38 @@ class AuthenticationController extends Controller
         $request->user()->currentAccessToken()->delete();
     }
 
+    public function loginAdmin(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if ($request->email != "ericksenjulius@gmail.com") {
+            return response()->json([
+                'message' => "Anda bukan admin"
+            ], 403);
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json(['error' => 'The provided credentials are incorrect.'], 422);
+        } else {
+            Auth::login($user);
+            $request->user()->tokens()->delete();
+            $token = $user->createToken($request->email)->plainTextToken;
+            return response()->json([
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                ],
+                'token' => $token
+            ], 200);
+        }
+    }
+
     // public function checkLogin(Request $request)
     // {
     //     $request->validate([

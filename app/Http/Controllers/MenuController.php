@@ -6,6 +6,8 @@ use App\Models\menu;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoremenuRequest;
 use App\Http\Requests\UpdatemenuRequest;
+use App\Models\category;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class MenuController extends Controller
@@ -16,7 +18,8 @@ class MenuController extends Controller
     public function index()
     {
         $data = Menu::with('category:id,name')->get();
-        return response()->json($data);
+        $category = category::all();
+        return response()->json(["menu" => $data, "category" => $category]);
     }
 
     /**
@@ -105,7 +108,7 @@ class MenuController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            Storage::delete('images/' . $menu->image);
+            Storage::delete('images/' . $request['oldImage']);
 
             $fileName = $this->randomString();
             $extension = $request->file('image')->extension();
@@ -113,10 +116,8 @@ class MenuController extends Controller
             $validatedData['image'] = $fileName . "." . $extension;
         }
 
-        // Perform the update operation
         $menu->update($validatedData);
 
-        // Fetch the updated menu item (optional)
         $menu = Menu::find($menu->id);
 
         return response()->json($menu, 200);
@@ -127,6 +128,36 @@ class MenuController extends Controller
      */
     public function destroy(menu $menu)
     {
-        //
+        Menu::destroy($menu->id);
+        if ($menu->image) {
+            Storage::delete($menu->image);
+        }
+        return response()->json(['message' => "Success"], 200);
+    }
+
+    public function updateMenu(Request $request, $id)
+    {
+        $menu = Menu::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'category_id' => 'required|integer|between:1,4',
+            'name' => 'required|max:255',
+            'description' => 'required',
+            'price' => 'required|integer|min:1',
+            'image' => 'image|max:1024|mimes:jpeg,png,jpg,gif',
+        ]);
+
+        if ($request->hasFile('image')) {
+            Storage::delete('images/' . $menu->image);
+
+            $fileName = $this->randomString();
+            $extension = $request->file('image')->extension();
+            $request->file('image')->storeAs('images', $fileName . "." . $extension);
+            $validatedData['image'] = $fileName . "." . $extension;
+        }
+
+        $menu->update($validatedData);
+
+        return response()->json($menu, 200);
     }
 }

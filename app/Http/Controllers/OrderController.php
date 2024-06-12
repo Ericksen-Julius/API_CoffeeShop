@@ -34,16 +34,13 @@ class OrderController extends Controller
 
             $item->save();
         }
+        Cart::where('user_id', Auth::user()->id)->delete();
 
-        $transaction = new Transaction();
-        $transaction->order_id = $newInsertedId;
-        $transaction->save();
 
         // Cart::where('user_id', Auth::user()->id)->delete();
 
         return response()->json([
             "order" => $data,
-            "transaction" => $transaction,
             "message" => "Berhasil melakukan order!!"
         ], 200);
     }
