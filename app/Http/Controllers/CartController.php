@@ -74,4 +74,15 @@ class CartController extends Controller
             return response()->json("no item");
         }
     }
+
+    public function incrementItem($id)
+    {
+        Cart::where('id', $id)->increment('count');
+        return response()->json("success");
+    }
+    public function decrementItem($id)
+    {
+        Cart::where('id', $id)->decrement('count');
+        return response()->json("success");
+    }
 }

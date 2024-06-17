@@ -32,3 +32,9 @@ Route::get('/getItemCart', [CartController::class, 'getItemFromCart'])->middlewa
 Route::post('/addToOrder', [OrderController::class, 'addOrder'])->middleware(['auth:sanctum']);
 //payment gateway
 Route::post('/create-transaction', [MidtransController::class, 'createTransaction'])->middleware(['auth:sanctum']);
+//update status
+Route::put('/payment/{id}/{status}', [OrderController::class, 'updatePayment']);
+//increment cart
+Route::put('incrementCart/{id}', [CartController::class, 'incrementItem'])->middleware(['auth:sanctum']);
+//decrement cart
+Route::put('decrementCart/{id}', [CartController::class, 'decrementItem'])->middleware(['auth:sanctum']);
