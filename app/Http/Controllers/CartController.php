@@ -58,4 +58,31 @@ class CartController extends Controller
             ], 404);
         }
     }
+
+    public function getItemFromCart()
+    {
+        // header("Access-Control-Allow-Origin: *");
+
+        header("Access-Control-Allow-Methods: *");
+
+        $userId = Auth::user()->id;
+        $cart = Cart::where('user_id', $userId)->with('menu')->get();
+
+        if ($cart->isNotEmpty()) {
+            return response()->json(["cart" => $cart], 200);
+        } else {
+            return response()->json("no item");
+        }
+    }
+
+    public function incrementItem($id)
+    {
+        Cart::where('id', $id)->increment('count');
+        return response()->json("success");
+    }
+    public function decrementItem($id)
+    {
+        Cart::where('id', $id)->decrement('count');
+        return response()->json("success");
+    }
 }
