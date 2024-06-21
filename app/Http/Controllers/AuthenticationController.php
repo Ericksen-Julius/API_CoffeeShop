@@ -32,6 +32,8 @@ class AuthenticationController extends Controller
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
+                    'phone' => $user->phone,
+                    'address' => $user->address
                 ],
                 'token' => $token
             ], 200);
@@ -59,7 +61,7 @@ class AuthenticationController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['error' => 'The provided credentials are incorrect.'], 422);
+            return response()->json(['error' => 'Password salah!'], 422);
         } else {
             Auth::login($user);
             $request->user()->tokens()->delete();
