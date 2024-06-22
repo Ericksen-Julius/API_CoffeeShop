@@ -62,4 +62,38 @@ class OrderController extends Controller
             ], 200);
         }
     }
+
+    public function getOrder()
+    {
+
+        header("Access-Control-Allow-Methods: *");
+
+        $userId = Auth::user()->id;
+        $order = Order::where('user_id', $userId)->with('item.menu')->orderBy('id', 'desc')->get();
+
+        if ($order->isNotEmpty()) {
+            $ordersTransformed = $order->map(function ($order) {
+                $left_item_count = $order->item->skip(1)->sum('count');
+                return [
+                    'order_id' => $order->id,
+                    'date' => $order->created_at->toDateString(),
+                    'status' => $order->status,
+                    'total_price' => $order->total_price,
+                    'total_left' => $left_item_count,
+                    'list_item' => $order->item->map(function ($item) {
+                        return [
+                            'name' => $item->menu->name,
+                            'image' => $item->menu->image ?? null,
+                            'price' => $item->menu->price,
+                            'quantity' => $item->count,
+
+                        ];
+                    }),
+                ];
+            });
+            return response()->json(["orders" => $ordersTransformed], 200);
+        } else {
+            return response()->json("no order");
+        }
+    }
 }

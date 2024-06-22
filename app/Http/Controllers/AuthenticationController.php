@@ -32,6 +32,7 @@ class AuthenticationController extends Controller
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
+                    'phone' => $user->phone,
                 ],
                 'token' => $token
             ], 200);
@@ -118,6 +119,41 @@ class AuthenticationController extends Controller
         return response()->json([
             'user' => $user,
             'message' => 'Berhasil Membuat akun!'
+        ], 200);
+    }
+
+    public function updateProfile(Request $request, $id)
+    {
+        // Validate the request data
+        $validatedData = $request->validate(
+            [
+                'name' => 'required|max:255',
+                'phone' => 'required',
+                'email' => 'required|email:dns|unique:users,email,' . $id,
+            ]
+        );
+
+        // Find the user by ID
+        $user = User::findOrFail($id);
+
+        // Update user details
+        $user->name = $validatedData['name'];
+        $user->phone = $validatedData['phone'];
+        $user->email = $validatedData['email'];
+
+        // Save the user
+        $user->save();
+        $token = $request->bearerToken();
+        // Return a response
+        return response()->json([
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->phone,
+                'address' => $user->address,
+            ],
+            'token' => $token
         ], 200);
     }
 }

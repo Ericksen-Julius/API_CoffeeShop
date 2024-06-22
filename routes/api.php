@@ -21,6 +21,7 @@ Route::post('/loginAdmin', [AuthenticationController::class, 'loginAdmin']);
 Route::get('/logout', [AuthenticationController::class, 'logout'])->middleware(['auth:sanctum']);
 // Route::get('/userLogin', [AuthenticationController::class, 'userLogin'])->middleware(['auth:sanctum']);
 Route::post('/signUp', [AuthenticationController::class, 'addToUser']);
+Route::put('/saveProfile/{id}', [AuthenticationController::class, 'updateProfile'])->middleware(['auth:sanctum']);
 
 //add to cart
 Route::post('/addToCart', [CartController::class, 'store'])->middleware(['auth:sanctum']);
@@ -30,6 +31,7 @@ Route::delete('/cart/{cart}', [CartController::class, 'removeFromCart'])->middle
 Route::get('/getItemCart', [CartController::class, 'getItemFromCart'])->middleware(['auth:sanctum']);
 //add to order
 Route::post('/addToOrder', [OrderController::class, 'addOrder'])->middleware(['auth:sanctum']);
+Route::get('/getOrderList', [OrderController::class, 'getOrder'])->middleware(['auth:sanctum']);
 //payment gateway
 Route::post('/create-transaction', [MidtransController::class, 'createTransaction'])->middleware(['auth:sanctum']);
 //update status

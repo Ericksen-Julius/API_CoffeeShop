@@ -14,4 +14,9 @@ class Item extends Model
     {
         return $this->belongsTo(Order::class);
     }
+
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class, 'product_id', 'id');
+    }
 }
