@@ -40,3 +40,5 @@ Route::put('/payment/{id}/{status}', [OrderController::class, 'updatePayment']);
 Route::put('incrementCart/{id}', [CartController::class, 'incrementItem'])->middleware(['auth:sanctum']);
 //decrement cart
 Route::put('decrementCart/{id}', [CartController::class, 'decrementItem'])->middleware(['auth:sanctum']);
+//top 3 items
+Route::get('/topThreeMenu', [MenuController::class, 'topThreeMenu']);

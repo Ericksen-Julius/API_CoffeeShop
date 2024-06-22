@@ -160,4 +160,9 @@ class MenuController extends Controller
 
         return response()->json($menu, 200);
     }
+
+    public function topThreeMenu(){
+        $result = Menu::orderBy('sold', 'desc')->limit(3)->get();
+        return response()->json(["menu" => $result]);
+    }
 }
