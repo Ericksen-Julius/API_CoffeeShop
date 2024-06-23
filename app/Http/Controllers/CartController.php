@@ -51,11 +51,11 @@ class CartController extends Controller
         if ($cart) {
             return response()->json([
                 'count' => $cart->count,
-                'note' => $cart->note == null ? '' : $cart->apache_note
+                'note' => $cart->note == null ? '' : $cart->note
             ], 200);
         } else {
             return response()->json([
-                'count' => 0,
+                'count' => 1,
                 'note' => ''
             ], 200);
         }
