@@ -109,7 +109,7 @@ class AuthenticationController extends Controller
                 'email' => 'required|email:dns|unique:users',
                 'password' => 'required|min:8|max:255',
                 'phone' => 'required',
-                'address' => 'required',
+                // 'address' => 'required',
             ]
         );
         // $validatedData['password'] = bcrypt($validatedData['password']);
@@ -151,7 +151,7 @@ class AuthenticationController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
                 'phone' => $user->phone,
-                'address' => $user->address,
+                // 'address' => $user->address,
             ],
             'token' => $token
         ], 200);
