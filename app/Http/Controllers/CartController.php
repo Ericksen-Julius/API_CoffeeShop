@@ -44,15 +44,16 @@ class CartController extends Controller
         ], 200);
     }
 
-    public function getInfo($product_id){
+    public function getInfo($product_id)
+    {
         $userId = Auth::user()->id;
-        $cart = Cart::where('product_id',$product_id)->where('user_id',$userId)->first();
-        if($cart){
+        $cart = Cart::where('product_id', $product_id)->where('user_id', $userId)->first();
+        if ($cart) {
             return response()->json([
                 'count' => $cart->count,
-                'note' => $cart->note
+                'note' => $cart->note == null ? '' : $cart->apache_note
             ], 200);
-        }else{
+        } else {
             return response()->json([
                 'count' => 0,
                 'note' => ''
@@ -88,7 +89,7 @@ class CartController extends Controller
         if ($cart->isNotEmpty()) {
             return response()->json(["cart" => $cart], 200);
         } else {
-            return response()->json(["cart" =>[]]);
+            return response()->json(["cart" => []]);
         }
     }
 
