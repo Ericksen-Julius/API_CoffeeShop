@@ -71,7 +71,7 @@ class CartController extends Controller
         if ($cart->isNotEmpty()) {
             return response()->json(["cart" => $cart], 200);
         } else {
-            return response()->json("no item");
+            return response()->json(["cart" =>[]]);
         }
     }
 
