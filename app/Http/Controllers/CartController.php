@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Ramsey\Uuid\Type\Integer;
 
 class CartController extends Controller
 {
@@ -41,6 +42,22 @@ class CartController extends Controller
             'data' => $cartItem,
             'message' => $message
         ], 200);
+    }
+
+    public function getInfo($product_id){
+        $userId = Auth::user()->id;
+        $cart = Cart::where('product_id',$product_id)->where('user_id',$userId)->first();
+        if($cart){
+            return response()->json([
+                'count' => $cart->count,
+                'note' => $cart->note
+            ], 200);
+        }else{
+            return response()->json([
+                'count' => 0,
+                'note' => ''
+            ], 200);
+        }
     }
 
     public function removeFromCart(Cart $cart)

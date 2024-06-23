@@ -42,3 +42,6 @@ Route::put('incrementCart/{id}', [CartController::class, 'incrementItem'])->midd
 Route::put('decrementCart/{id}', [CartController::class, 'decrementItem'])->middleware(['auth:sanctum']);
 //top 3 items
 Route::get('/topThreeMenu', [MenuController::class, 'topThreeMenu']);
+
+//get cart info
+Route::get('/cartInfo/{product_id}', [CartController::class, 'getInfo'])->middleware(['auth:sanctum']);
