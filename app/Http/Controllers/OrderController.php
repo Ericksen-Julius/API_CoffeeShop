@@ -93,7 +93,7 @@ class OrderController extends Controller
             });
             return response()->json(["orders" => $ordersTransformed], 200);
         } else {
-            return response()->json("no order");
+            return response()->json(["orders" => []]);
         }
     }
 }
