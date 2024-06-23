@@ -36,7 +36,7 @@ class OrderController extends Controller
             $item->save();
             Menu::where('id', $row->product_id)->increment('sold', $row->count);
         }
-        // Cart::where('user_id', Auth::user()->id)->delete();
+        Cart::where('user_id', Auth::user()->id)->delete();
 
 
         // Cart::where('user_id', Auth::user()->id)->delete();

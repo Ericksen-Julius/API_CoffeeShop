@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 //Menu Controller
-Route::resource('/menu', MenuController::class);
+Route::resource('/menu', MenuController::class)->middleware(['auth:sanctum']);
 
 Route::post('/updateMenu/{id}', [MenuController::class, "updateMenu"]);
 // Route::get('/category', MenuController::class, 'getCategory');
